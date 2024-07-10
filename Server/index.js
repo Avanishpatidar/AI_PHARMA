@@ -38,7 +38,7 @@ const generateContent = async (medicineName) => {
   const result = await model.generateContent(prompt);
   const response = await result.response;
 
-  return response.text();
+  return response.text;
 };
 
 const rateLimiter = (req, res, next) => {
