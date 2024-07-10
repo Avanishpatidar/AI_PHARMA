@@ -9,7 +9,7 @@ function InputForm({ setGeneratedContent }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/generate', {
+      const response = await fetch('https://ai-pharma-dfcp-apg00su27-avanishpatidars-projects.vercel.app/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
