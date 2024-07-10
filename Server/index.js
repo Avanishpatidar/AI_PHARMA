@@ -16,9 +16,7 @@ const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 let lastRequestTime = 0;
 const RATE_LIMIT_INTERVAL = 1000; // 1 request per second
 
-app.post('/generate', async (req, res) => {
-  const { medicineName } = req.body;
-
+const generateContent = async (medicineName) => {
   const prompt = `
     Please provide detailed information about the medicine ${medicineName} in the following categories:
     1. Composition: Describe the active ingredients.
@@ -37,17 +35,47 @@ app.post('/generate', async (req, res) => {
     14. Estimated Price in INR: Provide an estimated price in INR.
   `;
 
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+
+  return response.text();
+};
+
+const rateLimiter = (req, res, next) => {
+  const now = Date.now();
+  if (now - lastRequestTime < RATE_LIMIT_INTERVAL) {
+    return res.status(429).json({ error: 'Too Many Requests, please try again later.' });
+  }
+  lastRequestTime = now;
+  next();
+};
+
+app.get('/generate', rateLimiter, async (req, res) => {
+  const { medicineName } = req.query;
+
+  if (!medicineName) {
+    return res.status(400).json({ error: 'medicineName query parameter is required' });
+  }
+
   try {
-    const now = Date.now();
-    if (now - lastRequestTime < RATE_LIMIT_INTERVAL) {
-      return res.status(429).json({ error: 'Too Many Requests, please try again later.' });
-    }
-    lastRequestTime = now;
+    const content = await generateContent(medicineName);
+    res.json({ content });
+  } catch (error) {
+    console.error('Error generating content:', error);
+    res.status(500).json({ error: 'Error generating content' });
+  }
+});
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
+app.post('/generate', rateLimiter, async (req, res) => {
+  const { medicineName } = req.body;
 
-    res.json({ content: response.text() }); // Send raw response text to frontend
+  if (!medicineName) {
+    return res.status(400).json({ error: 'medicineName is required' });
+  }
+
+  try {
+    const content = await generateContent(medicineName);
+    res.json({ content });
   } catch (error) {
     console.error('Error generating content:', error);
     res.status(500).json({ error: 'Error generating content' });
