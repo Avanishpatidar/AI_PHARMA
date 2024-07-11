@@ -18,7 +18,7 @@ const sectionTitles = [
   'Estimated Price in INR'
 ];
 
-function GeneratedContent({ generatedContent }) {
+function GeneratedContent({ generatedContent, theme }) {
   if (!generatedContent) return null;
 
   // Clean up the content by removing unwanted symbols
@@ -37,8 +37,16 @@ function GeneratedContent({ generatedContent }) {
     }
   });
 
+  // Define CSS variables based on theme
+  const themeVars = {
+    '--bg-color': theme.bgColor || '#f9f9f9',
+    '--font-color': theme.fontColor || '#333',
+    '--hl-color': theme.hlColor || '#007bff',
+    '--fg-color': theme.fgColor || '#666'
+  };
+
   return (
-    <div className="generated-content">
+    <div className="generated-content" style={themeVars}>
       <h2>Generated Content:</h2>
       {sectionTitles.map((title, index) => (
         sections[title] && (
