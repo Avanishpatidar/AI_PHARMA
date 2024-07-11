@@ -37,16 +37,9 @@ function GeneratedContent({ generatedContent, theme }) {
     }
   });
 
-  // Define CSS variables based on theme
-  const themeVars = {
-    '--bg-color': theme.bgColor || '#f9f9f9',
-    '--font-color': theme.fontColor || '#333',
-    '--hl-color': theme.hlColor || '#007bff',
-    '--fg-color': theme.fgColor || '#666'
-  };
-
+  
   return (
-    <div className="generated-content" style={themeVars}>
+    <div className="generated-content">
       <h2>Generated Content:</h2>
       {sectionTitles.map((title, index) => (
         sections[title] && (

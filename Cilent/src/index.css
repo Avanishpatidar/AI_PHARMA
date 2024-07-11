@@ -1,0 +1,26 @@
+:root {
+    --bg-color: #f9f9f9;
+    --font-color: #333;
+    --hl-color: #007bff;
+    --fg-color: #f9f9f9;
+  }
+  
+  body {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+  }
+  
+  input, button {
+    background-color: var(--fg-color);
+    color: var(--font-color);
+    border: 1px solid var(--hl-color);
+  }
+  
+  button {
+    background-color: var(--hl-color);
+    color: var(--bg-color);
+  }
+  
+  .app-content {
+    min-height: 100vh;
+  }

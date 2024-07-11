@@ -1,0 +1,4 @@
+.app-content {
+    padding-top: 80px; /* Adjust this value as needed */
+    min-height: calc(100vh - 60px); /* Subtract the padding-top value */
+  }

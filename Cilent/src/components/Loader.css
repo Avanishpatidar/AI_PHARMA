@@ -1,19 +1,6 @@
+/* src/components/Loader.css */
 .loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  z-index: 1000; /* Ensure it's on top of other content */
-
-  /* Flexbox styles to center the loader */
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.loader.active {
-  display: flex; /* Show loader when active */
 }
