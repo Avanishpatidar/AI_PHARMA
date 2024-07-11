@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Loader from './Loader';
 import './InputForm.css';
 
 function InputForm({ setGeneratedContent }) {
@@ -8,6 +7,8 @@ function InputForm({ setGeneratedContent }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!medicineName.trim()) return;
+    
     setLoading(true);
     try {
       const response = await fetch(`https://ai-pharma-dfcp.vercel.app/generate?medicineName=${medicineName}`, {
@@ -18,7 +19,8 @@ function InputForm({ setGeneratedContent }) {
         body: JSON.stringify({ medicineName }),
       });
       const data = await response.json();
-      setGeneratedContent(data.content);
+      setGeneratedContent(prevContent => [...prevContent, { type: 'human', content: medicineName }, { type: 'ai', content: data.content }]);
+      setMedicineName('');
     } catch (error) {
       console.error('Error fetching generated content:', error);
     } finally {
@@ -27,19 +29,21 @@ function InputForm({ setGeneratedContent }) {
   };
 
   return (
-    <div className="input-form-container">
+    <div className={`input-form-container ${loading ? 'loading' : ''}`}>
       <form onSubmit={handleSubmit} className="input-form">
         <input
           type="text"
           value={medicineName}
           onChange={(e) => setMedicineName(e.target.value)}
-          placeholder="Enter medicine name"
+          placeholder="Enter a medicine name..."
           className="input-field"
+          disabled={loading}
         />
         <button type="submit" disabled={loading} className="submit-button">
-          {loading ? <Loader loading={loading} /> : 'Generate'}
+          {loading ? <div className="loader"></div> : 'Send'}
         </button>
       </form>
+      {loading && <div className="loading-overlay">Generating response...</div>}
     </div>
   );
 }

@@ -84,9 +84,8 @@ const themes = {
     fgColor: '#d6d6c2'
   }
 };
-
 function App() {
-  const [generatedContent, setGeneratedContent] = useState('');
+  const [generatedContent, setGeneratedContent] = useState([]);
   const [selectedTheme, setSelectedTheme] = useState(themes.default);
 
   const changeTheme = (themeName) => {
@@ -101,9 +100,9 @@ function App() {
     <div className="app">
       <ThemeSelector themes={themes} changeTheme={changeTheme} />
       <div className="app-content">
-        <InputForm setGeneratedContent={setGeneratedContent} />
         <GeneratedContent generatedContent={generatedContent} />
       </div>
+      <InputForm setGeneratedContent={setGeneratedContent} />
     </div>
   );
 }

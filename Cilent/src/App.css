@@ -1,4 +1,25 @@
-.app-content {
-    padding-top: 80px; /* Adjust this value as needed */
-    min-height: calc(100vh - 60px); /* Subtract the padding-top value */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .app {
+    min-height: 100vh;
+    padding-bottom: 80px; /* Adjust this value based on your input form height */
+    box-sizing: border-box;
+  }
+  
+  .app-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Theme selector styles */
+  .theme-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
   }
