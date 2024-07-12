@@ -1,25 +1,52 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-  
-  .app {
-    min-height: 100vh;
-    padding-bottom: 80px; /* Adjust this value based on your input form height */
-    box-sizing: border-box;
-  }
-  
-  .app-content {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* Theme selector styles */
-  .theme-selector {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1001;
-  }
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 100px;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.app-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.welcome-container {
+  text-align: center;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.welcome-container h1 {
+  font-size: 3em;
+  color: var(--hl-color);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.welcome-container p {
+  font-size: 1.4em;
+  margin-bottom: 30px;
+  opacity: 0.8;
+}

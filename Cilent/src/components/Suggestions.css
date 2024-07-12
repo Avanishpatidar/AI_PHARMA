@@ -1,0 +1,28 @@
+.suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  
+.suggestion-button {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: var(--hl-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+
+
+.suggestion-button:hover {
+    background-color: var(--font-color);
+  }
+  

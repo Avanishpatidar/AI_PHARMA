@@ -1,77 +1,97 @@
 .generated-content {
   max-width: 800px;
   margin: 0 auto;
+  padding: 20px;
+}
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .message {
-  margin-bottom: 20px;
-  padding: 15px;
-  border-radius: 8px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  max-width: 80%;
 }
 
 .message.human {
-  background-color: var(--fg-color);
-  color: var(--font-color);
   align-self: flex-end;
+  background-color: var(--hl-color);
+  color: var(--bg-color);
 }
 
 .message.ai {
-  background-color: transparent;
+  align-self: flex-start;
+  background-color: var(--fg-color);
   color: var(--font-color);
 }
 
-.message-content {
-  font-size: 16px;
-  line-height: 1.5;
+.ai-response {
+  background-color: rgba(var(--fg-color-rgb), 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.ai-response {
+.section-navigation {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.section-button {
+  background-color: transparent;
+  border: 1px solid var(--hl-color);
+  color: var(--font-color);
+  padding: 5px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9em;
+}
+
+.section-button:hover,
+.section-button.active {
+  background-color: var(--hl-color);
+  color: var(--bg-color);
+}
+
+.section-icon {
+  margin-right: 5px;
 }
 
 .card {
-  flex: 1 1 300px;
-  border: 1px solid var(--hl-color);
-  border-radius: 8px;
-  padding: 15px;
-  background-color: var(--fg-color);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  opacity: 0;
-  transform: translateY(20px);
+  background-color: rgba(var(--fg-color-rgb), 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(0) scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-10px);
 }
 
 .card-title {
   font-size: 1.2em;
-  margin-bottom: 10px;
   color: var(--hl-color);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.card-icon {
+  margin-right: 10px;
 }
 
 .card-content {
   font-size: 1em;
-  min-height: 1em; /* Ensure consistent height during animation */
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-in {
-  animation: fadeInUp 0.5s ease-out forwards;
+  line-height: 1.5;
 }
 
 .animating .card-content::after {

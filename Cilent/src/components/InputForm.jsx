@@ -8,7 +8,7 @@ function InputForm({ setGeneratedContent }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!medicineName.trim()) return;
-    
+
     setLoading(true);
     try {
       const response = await fetch(`https://ai-pharma-dfcp.vercel.app/generate?medicineName=${medicineName}`, {

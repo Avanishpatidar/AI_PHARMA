@@ -19,31 +19,29 @@ const sectionTitles = [
 ];
 
 function GeneratedContent({ generatedContent }) {
+  const [activeSection, setActiveSection] = useState(0);
+
   if (!generatedContent || generatedContent.length === 0) return null;
+
+  const lastAIResponse = generatedContent.filter(msg => msg.type === 'ai').pop();
 
   return (
     <div className="generated-content">
-      {generatedContent.map((message, index) => (
-        <div key={index} className={`message ${message.type}`}>
-          <div className="message-content">
-            {message.type === 'human' ? (
-              <p>{message.content}</p>
-            ) : (
-              formatAIResponse(message.content)
-            )}
-          </div>
+      {lastAIResponse && (
+        <div className="ai-response">
+          {formatAIResponse(lastAIResponse.content, activeSection, setActiveSection)}
         </div>
-      ))}
+      )}
     </div>
   );
 }
 
-function formatAIResponse(content) {
+function formatAIResponse(content, activeSection, setActiveSection) {
   const cleanedContent = content
     .replace(/##/g, '')
     .replace(/\*\*/g, '')
     .replace(/\*/g, '')
-    .replace(/\d+\.\s*/g, ''); // Remove numbering
+    .replace(/\d+\.\s*/g, '');
 
   const sections = {};
   sectionTitles.forEach(title => {
@@ -54,28 +52,41 @@ function formatAIResponse(content) {
     }
   });
 
+  const activeSectionData = sectionTitles[activeSection];
+  const sectionContent = sections[activeSectionData.name];
+
   return (
-    <div className="ai-response">
-      {sectionTitles.map((section, index) => (
-        sections[section.name] && (
-          <AnimatedCard 
+    <>
+      <div className="section-navigation">
+        {sectionTitles.map((section, index) => (
+          <button
             key={index}
-            title={section.name}
-            icon={section.icon}
-            content={sections[section.name]}
-            delay={index * 100}
-          />
-        )
-      ))}
-    </div>
+            className={`section-button ${index === activeSection ? 'active' : ''}`}
+            onClick={() => setActiveSection(index)}
+          >
+            <i className={`${section.icon} section-icon`}></i>
+            {section.name}
+          </button>
+        ))}
+      </div>
+      {sectionContent && (
+        <AnimatedCard
+          title={activeSectionData.name}
+          icon={activeSectionData.icon}
+          content={sectionContent}
+        />
+      )}
+    </>
   );
 }
 
-function AnimatedCard({ title, icon, content, delay }) {
+function AnimatedCard({ title, icon, content }) {
   const [displayedContent, setDisplayedContent] = useState('');
   const [isAnimating, setIsAnimating] = useState(true);
 
   useEffect(() => {
+    setIsAnimating(true);
+    setDisplayedContent('');
     let timeoutId;
     const animateText = (text, index) => {
       if (index <= text.length) {
@@ -86,18 +97,13 @@ function AnimatedCard({ title, icon, content, delay }) {
       }
     };
 
-    if (isAnimating) {
-      timeoutId = setTimeout(() => animateText(content, 0), delay);
-    }
+    timeoutId = setTimeout(() => animateText(content, 0), 100);
 
     return () => clearTimeout(timeoutId);
-  }, [content, delay, isAnimating]);
+  }, [content]);
 
   return (
-    <div 
-      className={`card animate-in ${isAnimating ? 'animating' : ''}`}
-      style={{ animationDelay: `${delay}ms` }}
-    >
+    <div className={`card ${isAnimating ? 'animating' : ''}`}>
       <h3 className="card-title">
         <i className={`${icon} card-icon`}></i>
         {title}

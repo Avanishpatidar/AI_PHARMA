@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import InputForm from './components/InputForm';
 import GeneratedContent from './components/GeneratedContent';
 import ThemeSelector from './components/ThemeSelector';
+import Suggestions from './components/Suggestions';
 import './App.css';
 
 const themes = {
@@ -84,9 +85,11 @@ const themes = {
     fgColor: '#d6d6c2'
   }
 };
+
 function App() {
   const [generatedContent, setGeneratedContent] = useState([]);
   const [selectedTheme, setSelectedTheme] = useState(themes.default);
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   const changeTheme = (themeName) => {
     setSelectedTheme(themes[themeName]);
@@ -96,13 +99,25 @@ function App() {
     document.documentElement.style.setProperty('--fg-color', themes[themeName].fgColor);
   };
 
+  const handleGenerateContent = (content) => {
+    setGeneratedContent(content);
+    setShowSuggestions(false);
+  };
+
   return (
     <div className="app">
       <ThemeSelector themes={themes} changeTheme={changeTheme} />
       <div className="app-content">
+        {showSuggestions && (
+          <div className="welcome-container">
+            <h1>Welcome to AI Pharma</h1>
+            <p>Choose a medicine or search for one below:</p>
+            <Suggestions onSuggestionClick={handleGenerateContent} />
+          </div>
+        )}
         <GeneratedContent generatedContent={generatedContent} />
       </div>
-      <InputForm setGeneratedContent={setGeneratedContent} />
+      <InputForm setGeneratedContent={handleGenerateContent} />
     </div>
   );
 }
