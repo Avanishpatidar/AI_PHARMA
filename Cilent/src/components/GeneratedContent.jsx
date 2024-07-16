@@ -49,8 +49,12 @@ function formatAIResponse(content, activeSection, setActiveSection) {
     const match = cleanedContent.match(regex);
     if (match) {
       sections[title.name] = match[0].replace(`${title.name}:`, '').trim();
+    } else {
+      sections[title.name] = 'Not available';
     }
   });
+
+  console.log("Sections Extracted:", sections); // Debugging: Log the extracted sections
 
   const activeSectionData = sectionTitles[activeSection];
   const sectionContent = sections[activeSectionData.name];
@@ -69,12 +73,14 @@ function formatAIResponse(content, activeSection, setActiveSection) {
           </button>
         ))}
       </div>
-      {sectionContent && (
+      {sectionContent && sectionContent !== 'Not available' ? (
         <AnimatedCard
           title={activeSectionData.name}
           icon={activeSectionData.icon}
           content={sectionContent}
         />
+      ) : (
+        <div className="no-content">No content available for {activeSectionData.name}</div>
       )}
     </>
   );
@@ -91,13 +97,13 @@ function AnimatedCard({ title, icon, content }) {
     const animateText = (text, index) => {
       if (index <= text.length) {
         setDisplayedContent(text.slice(0, index));
-        timeoutId = setTimeout(() => animateText(text, index + 1), 20);
+        timeoutId = setTimeout(() => animateText(text, index + 1), 10); // Speed up animation
       } else {
         setIsAnimating(false);
       }
     };
 
-    timeoutId = setTimeout(() => animateText(content, 0), 100);
+    timeoutId = setTimeout(() => animateText(content, 0), 50); // Start animation faster
 
     return () => clearTimeout(timeoutId);
   }, [content]);

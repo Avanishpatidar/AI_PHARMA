@@ -95,8 +95,8 @@
 }
 
 .animating .card-content::after {
-  content: '|';
-  animation: blink 0.7s infinite;
+  content: '*';
+  animation: blink 0.0s infinite;
 }
 
 @keyframes blink {
