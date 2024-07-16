@@ -86,7 +86,7 @@
 }
 
 .card-icon {
-  margin-right: 10px;
+  margin-right:  10px;
 }
 
 .card-content {
@@ -95,8 +95,8 @@
 }
 
 .animating .card-content::after {
-  content: '*';
-  animation: blink 0.0s infinite;
+  content: '........';
+  animation: blink 0.2s infinite;
 }
 
 @keyframes blink {

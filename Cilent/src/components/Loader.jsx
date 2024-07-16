@@ -1,12 +1,11 @@
-// src/components/Loader.jsx
 import React from 'react';
 import { ClipLoader } from 'react-spinners';
 import './Loader.css';
 
-function Loader({ loading }) {
+function Loader({ loading, size = 20, color = "#ffffff" }) {
   return (
-    <div className="loader">
-      <ClipLoader size={20} color="#ffffff" loading={loading} />
+    <div className={`loader-container ${loading ? 'loading' : ''}`}>
+      <ClipLoader size={size} color={color} loading={loading} />
     </div>
   );
 }

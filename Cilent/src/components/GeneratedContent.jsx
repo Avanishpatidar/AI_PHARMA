@@ -87,23 +87,25 @@ function formatAIResponse(content, activeSection, setActiveSection) {
 }
 
 function AnimatedCard({ title, icon, content }) {
-  const [displayedContent, setDisplayedContent] = useState('');
+  const [displayedContent, setDisplayedContent] = useState([]);
   const [isAnimating, setIsAnimating] = useState(true);
 
   useEffect(() => {
     setIsAnimating(true);
-    setDisplayedContent('');
+    setDisplayedContent([]);
     let timeoutId;
-    const animateText = (text, index) => {
-      if (index <= text.length) {
-        setDisplayedContent(text.slice(0, index));
-        timeoutId = setTimeout(() => animateText(text, index + 1), 10); // Speed up animation
+    const lines = content.split('\n').filter(line => line.trim() !== '');
+
+    const animateLines = (lines, index) => {
+      if (index < lines.length) {
+        setDisplayedContent(prevLines => [...prevLines, lines[index]]);
+        timeoutId = setTimeout(() => animateLines(lines, index + 1), 1500); // Adjust animation speed here
       } else {
         setIsAnimating(false);
       }
     };
 
-    timeoutId = setTimeout(() => animateText(content, 0), 50); // Start animation faster
+    animateLines(lines, 0);
 
     return () => clearTimeout(timeoutId);
   }, [content]);
@@ -114,7 +116,11 @@ function AnimatedCard({ title, icon, content }) {
         <i className={`${icon} card-icon`}></i>
         {title}
       </h3>
-      <p className="card-content">{displayedContent}</p>
+      <div className="card-content">
+        {displayedContent.map((line, index) => (
+          <p key={index}>{line}</p>
+        ))}
+      </div>
     </div>
   );
 }

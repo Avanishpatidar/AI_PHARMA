@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ThemeSelector.css';
+import { FaPalette } from 'react-icons/fa'; // Import an icon from react-icons
 
 function ThemeSelector({ themes, changeTheme }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,8 +14,8 @@ function ThemeSelector({ themes, changeTheme }) {
 
   return (
     <div className="theme-selector">
-      <button onClick={toggleDropdown} className="theme-selector-button">
-        Select Theme
+      <button onClick={toggleDropdown} className="theme-selector-icon-button">
+        <FaPalette />
       </button>
       {isOpen && (
         <div className="theme-dropdown">

@@ -7,24 +7,17 @@ import './App.css';
 
 const themes = {
   default: {
-    bgColor: '#f9f9f9',
-    fontColor: '#333',
-    hlColor: '#007bff',
-    fgColor: '#f9f9f9'
+    bgColor: '#f2e6d8',
+    fontColor: '#3b2925',
+    hlColor: '#c19875',
+    fgColor: '#f2e6d8'
   },
   mkbhd: {
     bgColor: '#000',
     fontColor: '#fff',
     hlColor: '#4caf50',
     fgColor: '#333'
-  },
-  mocha: {
-    bgColor: '#f2e6d8',
-    fontColor: '#3b2925',
-    hlColor: '#c19875',
-    fgColor: '#f2e6d8'
-  },
-  coral: {
+  },coral: {
     bgColor: '#f07866',
     fontColor: '#fff',
     hlColor: '#fc5a50',
@@ -84,6 +77,7 @@ const themes = {
     hlColor: '#c9cba3',
     fgColor: '#d6d6c2'
   }
+  // Add more themes here...
 };
 
 function App() {
