@@ -1,6 +1,5 @@
 const express = require('express');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const SavedContent = require('../models/SavedContent');
 const router = express.Router();
 
 require('dotenv').config();
@@ -45,20 +44,10 @@ const rateLimiter = (req, res, next) => {
   next();
 };
 
-const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorization');
-  if (!token) return res.status(401).json({ error: 'Access denied' });
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ error: 'Invalid token' });
-    req.user = user;
-    next();
-  });
-};
-
-router.get('/generate', rateLimiter, async (req, res) => {
-  const { medicineName } = req.query;
+router.get('/generate/:medicineName', rateLimiter, async (req, res) => {
+  const { medicineName } = req.params;
   if (!medicineName) {
-    return res.status(400).json({ error: 'medicineName query parameter is required' });
+    return res.status(400).json({ error: 'medicineName parameter is required' });
   }
   try {
     const content = await generateContent(medicineName);
@@ -68,15 +57,13 @@ router.get('/generate', rateLimiter, async (req, res) => {
   }
 });
 
-router.post('/generate', rateLimiter, authenticateToken, async (req, res) => {
+router.post('/generate', rateLimiter, async (req, res) => {
   const { medicineName } = req.body;
   if (!medicineName) {
     return res.status(400).json({ error: 'medicineName is required' });
   }
   try {
     const content = await generateContent(medicineName);
-    const savedContent = new SavedContent({ userId: req.user.id, medicineName, content });
-    await savedContent.save();
     res.json({ content });
   } catch (error) {
     res.status(500).json({ error: 'Error generating content' });

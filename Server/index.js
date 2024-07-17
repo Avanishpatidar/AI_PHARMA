@@ -10,11 +10,16 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected...'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Your routes and other middleware here...
+// Import and use routers
+const authRouter = require('./routes/auth');
+const generateRouter = require('./routes/generate');
+
+app.use('/auth', authRouter);
+app.use('/', generateRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
