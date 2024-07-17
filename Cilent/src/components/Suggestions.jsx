@@ -1,6 +1,6 @@
-// src/components/Suggestions.jsx
 import React, { useState } from 'react';
 import './Suggestions.css';
+import Loader from './Loader';
 
 const commonMedicines = [
   "Paracetamol",
@@ -33,19 +33,21 @@ function Suggestions({ onSuggestionClick }) {
   };
 
   return (
-    <div className="suggestions">
-      {commonMedicines.map((medicine, index) => (
-        <button
-          key={index}
-          onClick={() => handleSubmit(medicine)}
-          className="suggestion-button"
-          disabled={loadingSuggestion === medicine}
-        >
-          {medicine}
-          {loadingSuggestion === medicine && <div className="loader"></div>}
-        </button>
-      ))}
-    </div>
+    <>
+      <div className="suggestions">
+        {commonMedicines.map((medicine, index) => (
+          <button
+            key={index}
+            onClick={() => handleSubmit(medicine)}
+            className="suggestion-button"
+            disabled={loadingSuggestion === medicine}
+          >
+            {medicine}
+          </button>
+        ))}
+      </div>
+      <Loader loading={loadingSuggestion !== null} />
+    </>
   );
 }
 

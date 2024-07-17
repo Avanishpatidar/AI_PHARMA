@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './InputForm.css';
+import Loader from './Loader';
 
 function InputForm({ setGeneratedContent }) {
   const [medicineName, setMedicineName] = useState('');
@@ -29,22 +30,24 @@ function InputForm({ setGeneratedContent }) {
   };
 
   return (
-    <div className={`input-form-container ${loading ? 'loading' : ''}`}>
-      <form onSubmit={handleSubmit} className="input-form">
-        <input
-          type="text"
-          value={medicineName}
-          onChange={(e) => setMedicineName(e.target.value)}
-          placeholder="Enter a medicine name..."
-          className="input-field"
-          disabled={loading}
-        />
-        <button type="submit" disabled={loading} className="submit-button">
-          {loading ? <div className="loader"></div> : 'Send'}
-        </button>
-      </form>
-      {loading && <div className="loading-overlay">Generating response...</div>}
-    </div>
+    <>
+      <div className="input-form-container">
+        <form onSubmit={handleSubmit} className="input-form">
+          <input
+            type="text"
+            value={medicineName}
+            onChange={(e) => setMedicineName(e.target.value)}
+            placeholder="Enter a medicine name..."
+            className="input-field"
+            disabled={loading}
+          />
+          <button type="submit" disabled={loading} className="submit-button">
+            {loading ? 'Generating...' : 'Send'}
+          </button>
+        </form>
+      </div>
+      <Loader loading={loading} />
+    </>
   );
 }
 
