@@ -99,7 +99,7 @@ function AnimatedCard({ title, icon, content }) {
     const animateLines = (lines, index) => {
       if (index < lines.length) {
         setDisplayedContent(prevLines => [...prevLines, lines[index]]);
-        timeoutId = setTimeout(() => animateLines(lines, index + 1), 1500); // Adjust animation speed here
+        timeoutId = setTimeout(() => animateLines(lines, index + 1), 500); // Adjust animation speed here
       } else {
         setIsAnimating(false);
       }

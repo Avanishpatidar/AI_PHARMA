@@ -1,29 +1,47 @@
-import React, { useState } from 'react';
-import './InputForm.css';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 import Loader from './Loader';
+import './InputForm.css';
 
-function InputForm({ setGeneratedContent }) {
+const InputForm = ({ setGeneratedContent }) => {
   const [medicineName, setMedicineName] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(AuthContext);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleGenerate = async () => {
     if (!medicineName.trim()) return;
 
     setLoading(true);
     try {
-      const response = await fetch(`https://ai-pharma-dfcp.vercel.app/generate?medicineName=${medicineName}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ medicineName }),
-      });
-      const data = await response.json();
-      setGeneratedContent(prevContent => [...prevContent, { type: 'human', content: medicineName }, { type: 'ai', content: data.content }]);
+      console.log('Generating content for:', medicineName);
+      const response = await axios.post('https://ai-pharma-dfcp.vercel.app/generate', { medicineName });
+      const generatedContent = response.data.content;
+      console.log('Generated content:', generatedContent);
+
+      // Use the setGeneratedContent function from props
+      setGeneratedContent(medicineName, generatedContent);
       setMedicineName('');
+
+      if (user) {
+        const token = localStorage.getItem('token');
+        if (token) {
+          await axios.post(
+            'https://ai-pharma-dfcp.vercel.app/generate/save',
+            { medicineName, content: generatedContent },
+            { headers: { 'Authorization': `Bearer ${token}` } }
+          );
+          console.log('Content saved');
+        } else {
+          console.error('No token found, content not saved');
+        }
+      }
     } catch (error) {
-      console.error('Error fetching generated content:', error);
+      if (error.response) {
+        console.error('Failed to generate content:', error.response.data);
+      } else {
+        console.error('Failed to generate content:', error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -32,23 +50,25 @@ function InputForm({ setGeneratedContent }) {
   return (
     <>
       <div className="input-form-container">
-        <form onSubmit={handleSubmit} className="input-form">
+        <form onSubmit={(e) => { e.preventDefault(); handleGenerate(); }} className="input-form">
           <input
+            className="input-field"
             type="text"
             value={medicineName}
             onChange={(e) => setMedicineName(e.target.value)}
             placeholder="Enter a medicine name..."
-            className="input-field"
             disabled={loading}
           />
-          <button type="submit" disabled={loading} className="submit-button">
-            {loading ? 'Generating...' : 'Send'}
-          </button>
+          <div className="submit-button-container">
+            <button className="submit-button" type="submit" disabled={loading}>
+              {loading ? 'Generating...' : 'Generate'}
+            </button>
+          </div>
         </form>
       </div>
       <Loader loading={loading} />
     </>
   );
-}
+};
 
 export default InputForm;

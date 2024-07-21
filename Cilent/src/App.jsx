@@ -1,118 +1,25 @@
-import React, { useState } from 'react';
-import InputForm from './components/InputForm';
-import GeneratedContent from './components/GeneratedContent';
-import ThemeSelector from './components/ThemeSelector';
-import Suggestions from './components/Suggestions';
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import './App.css';
 
-const themes = {
-  default: {
-    bgColor: '#f2e6d8',
-    fontColor: '#3b2925',
-    hlColor: '#c19875',
-    fgColor: '#f2e6d8'
-  },
-  mkbhd: {
-    bgColor: '#000',
-    fontColor: '#fff',
-    hlColor: '#4caf50',
-    fgColor: '#333'
-  },coral: {
-    bgColor: '#f07866',
-    fontColor: '#fff',
-    hlColor: '#fc5a50',
-    fgColor: '#f5cac3'
-  },
-  ocean: {
-    bgColor: '#007bff',
-    fontColor: '#fff',
-    hlColor: '#64a6ff',
-    fgColor: '#00203f'
-  },
-  azure: {
-    bgColor: '#f0faff',
-    fontColor: '#333',
-    hlColor: '#1a73e8',
-    fgColor: '#d7e8fa'
-  },
-  forest: {
-    bgColor: '#005108',
-    fontColor: '#fff',
-    hlColor: '#68b35d',
-    fgColor: '#003c09'
-  },
-  'rose-milk': {
-    bgColor: '#fce4ec',
-    fontColor: '#333',
-    hlColor: '#f48fb1',
-    fgColor: '#fff0f6'
-  },
-  celestial: {
-    bgColor: '#1a1a2e',
-    fontColor: '#e94560',
-    hlColor: '#6f4a8e',
-    fgColor: '#16213e'
-  },
-  serenity: {
-    bgColor: '#d6e4f0',
-    fontColor: '#364f6b',
-    hlColor: '#f6b352',
-    fgColor: '#f9f9f9'
-  },
-  mystic: {
-    bgColor: '#2c3e50',
-    fontColor: '#c0392b',
-    hlColor: '#2980b9',
-    fgColor: '#34495e'
-  },
-  aurora: {
-    bgColor: '#2c3e50',
-    fontColor: '#f39c12',
-    hlColor: '#3498db',
-    fgColor: '#2980b9'
-  },
-  tranquility: {
-    bgColor: '#fefae0',
-    fontColor: '#7e5a2f',
-    hlColor: '#c9cba3',
-    fgColor: '#d6d6c2'
-  }
-  // Add more themes here...
-};
-
 function App() {
-  const [generatedContent, setGeneratedContent] = useState([]);
-  const [selectedTheme, setSelectedTheme] = useState(themes.default);
-  const [showSuggestions, setShowSuggestions] = useState(true);
-
-  const changeTheme = (themeName) => {
-    setSelectedTheme(themes[themeName]);
-    document.documentElement.style.setProperty('--bg-color', themes[themeName].bgColor);
-    document.documentElement.style.setProperty('--font-color', themes[themeName].fontColor);
-    document.documentElement.style.setProperty('--hl-color', themes[themeName].hlColor);
-    document.documentElement.style.setProperty('--fg-color', themes[themeName].fgColor);
-  };
-
-  const handleGenerateContent = (content) => {
-    setGeneratedContent(content);
-    setShowSuggestions(false);
-  };
-
   return (
-    <div className="app">
-      <ThemeSelector themes={themes} changeTheme={changeTheme} />
-      <div className="app-content">
-        {showSuggestions && (
-          <div className="welcome-container">
-            <h1>Welcome to AI Pharma</h1>
-            <p>Choose a medicine or search for one below:</p>
-            <Suggestions onSuggestionClick={handleGenerateContent} />
-          </div>
-        )}
-        <GeneratedContent generatedContent={generatedContent} />
-      </div>
-      <InputForm setGeneratedContent={handleGenerateContent} />
-    </div>
+    <AuthProvider>
+      <Router>
+        <div className="app">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Suggestions.css';
 import Loader from './Loader';
+import axios from 'axios';
 
 const commonMedicines = [
   "Paracetamol",
@@ -16,15 +17,21 @@ function Suggestions({ onSuggestionClick }) {
   const handleSubmit = async (medicine) => {
     setLoadingSuggestion(medicine);
     try {
-      const response = await fetch(`https://ai-pharma-dfcp.vercel.app/generate?medicineName=${medicine}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ medicineName: medicine }),
-      });
-      const data = await response.json();
-      onSuggestionClick([{ type: 'human', content: medicine }, { type: 'ai', content: data.content }]);
+      const response = await axios.post('https://ai-pharma-dfcp.vercel.app/generate', { medicineName: medicine });
+      const generatedContent = response.data.content;
+      onSuggestionClick(medicine);
+  
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        const token = localStorage.getItem('token');
+        if (token) {
+          await axios.post(
+            'https://ai-pharma-dfcp.vercel.app/generate/save',
+            { medicineName: medicine, content: generatedContent },
+            { headers: { 'Authorization': `Bearer ${token}` } }
+          );
+        }
+      }
     } catch (error) {
       console.error('Error fetching generated content:', error);
     } finally {
