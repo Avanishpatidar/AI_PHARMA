@@ -15,7 +15,7 @@ const Sidebar = ({ savedContent, isOpen, onItemClick, selectedItem }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (

@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 25px;
+  padding: 20px;  
   background-color: rgba(var(--fg-color-rgb), 0.1);
   backdrop-filter: blur(10px);
   border-radius: 20px;
@@ -23,15 +23,15 @@
 
 .input-form {
   display: flex;
-  gap: 15px;
+  gap: 10px; 
 }
 
 .input-field {
   flex-grow: 1;
-  padding: 15px 20px;
-  font-size: 18px;
+  padding: 10px 15px; 
+  font-size: 16px;  
   border: 1px solid rgba(var(--hl-color-rgb), 0.3);
-  border-radius: 20px;
+  border-radius: 15px;
   outline: none;
   transition: all 0.3s ease;
   background-color: rgba(var(--bg-color-rgb), 0.1);
@@ -39,12 +39,12 @@
 }
 
 .submit-button {
-  padding: 15px 25px;
-  font-size: 18px;
+  padding: 10px 20px;
+  font-size: 16px;  
   background-color: var(--hl-color);
   color: var(--bg-color);
   border: none;
-  border-radius: 20px;
+  border-radius: 15px; 
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -66,7 +66,7 @@
     width: calc(100% - 40px);
     left: 20px;
     right: 20px;
-    padding: 20px;
+    padding: 15px;
   }
 
   .input-form {

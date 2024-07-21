@@ -19,7 +19,6 @@ const InputForm = ({ setGeneratedContent }) => {
       const generatedContent = response.data.content;
       console.log('Generated content:', generatedContent);
 
-      // Use the setGeneratedContent function from props
       setGeneratedContent(medicineName, generatedContent);
       setMedicineName('');
 

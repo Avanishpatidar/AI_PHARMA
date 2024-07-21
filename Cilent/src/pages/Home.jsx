@@ -7,84 +7,47 @@ import GeneratedContent from '../components/GeneratedContent';
 import ThemeSelector from '../components/ThemeSelector';
 import Suggestions from '../components/Suggestions';
 import Sidebar from '../components/Sidebar';
+import Loader from '../components/Loader'; 
+import './Home.css';
 
 const themes = {
-  default: {
-    bgColor: '#f2e6d8',
-    fontColor: '#3b2925',
-    hlColor: '#c19875',
-    fgColor: '#f2e6d8'
+  clinical: {
+    bgColor: '#f5f8f9',  
+    fontColor: '#2c3e50',  
+    hlColor: '#3498db',  
+    fgColor: '#ffffff'   
   },
-  mkbhd: {
-    bgColor: '#000',
-    fontColor: '#fff',
-    hlColor: '#4caf50',
-    fgColor: '#333'
+  professional: {
+    bgColor: '#ffffff',  
+    fontColor: '#333333',  
+    hlColor: '#4caf50',  
+    fgColor: '#f2f2f2'  
   },
-  coral: {
-    bgColor: '#f07866',
-    fontColor: '#fff',
-    hlColor: '#fc5a50',
-    fgColor: '#f5cac3'
+  health: {
+    bgColor: '#e9f5f7',  
+    fontColor: '#2c3e50',  
+    hlColor: '#1abc9c',  
+    fgColor: '#ffffff'   
   },
-  ocean: {
-    bgColor: '#007bff',
-    fontColor: '#fff',
-    hlColor: '#64a6ff',
-    fgColor: '#00203f'
+  serenity: {
+    bgColor: '#d6e4f0',  
+    fontColor: '#364f6b',  
+    hlColor: '#f6b352',  
+    fgColor: '#f9f9f9'   
   },
-  azure: {
-    bgColor: '#f0faff',
-    fontColor: '#333',
-    hlColor: '#1a73e8',
-    fgColor: '#d7e8fa'
+  tranquility: {
+    bgColor: '#fefae0',  
+    fontColor: '#7e5a2f',  
+    hlColor: '#c9cba3',  
+    fgColor: '#d6d6c2'   
   },
-  forest: {
-    bgColor: '#005108',
-    fontColor: '#fff',
-    hlColor: '#68b35d',
-    fgColor: '#003c09'
-  },
-  'rose-milk': {
+  rose_milk: {
     bgColor: '#fce4ec',
     fontColor: '#333',
     hlColor: '#f48fb1',
     fgColor: '#fff0f6'
   },
-  celestial: {
-    bgColor: '#1a1a2e',
-    fontColor: '#e94560',
-    hlColor: '#6f4a8e',
-    fgColor: '#16213e'
-  },
-  serenity: {
-    bgColor: '#d6e4f0',
-    fontColor: '#364f6b',
-    hlColor: '#f6b352',
-    fgColor: '#f9f9f9'
-  },
-  mystic: {
-    bgColor: '#2c3e50',
-    fontColor: '#c0392b',
-    hlColor: '#2980b9',
-    fgColor: '#34495e'
-  },
-  aurora: {
-    bgColor: '#2c3e50',
-    fontColor: '#f39c12',
-    hlColor: '#3498db',
-    fgColor: '#2980b9'
-  },
-  tranquility: {
-    bgColor: '#fefae0',
-    fontColor: '#7e5a2f',
-    hlColor: '#c9cba3',
-    fgColor: '#d6d6c2'
-  }
-  // other themes...
 };
-
-
 
 const Home = () => {
   const [generatedContent, setGeneratedContent] = useState([]);
@@ -92,10 +55,12 @@ const Home = () => {
   const [selectedTheme, setSelectedTheme] = useState('default');
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [selectedSidebarItem, setSelectedSidebarItem] = useState(null);
   const [currentInput, setCurrentInput] = useState('');
+  const [promptLogin, setPromptLogin] = useState(false);
 
   const fetchSavedContent = async () => {
     if (user) {
@@ -125,8 +90,10 @@ const Home = () => {
   };
 
   const handleGenerateContent = async (content) => {
+    setLoading(true); // Start loader
+    setCurrentInput(content);
+
     try {
-      setCurrentInput(content);
       const response = await axios.post(
         'https://ai-pharma-dfcp.vercel.app/generate',
         { medicineName: content }
@@ -137,23 +104,30 @@ const Home = () => {
         { type: 'ai', content: generatedContent, medicineName: content }
       ];
 
-      setGeneratedContent(newContent);
-      setShowSuggestions(false);
-      setSelectedSidebarItem(null);
+      setTimeout(() => {
+        setGeneratedContent(newContent);
+        setShowSuggestions(false);
+        setSelectedSidebarItem(null);
+        setLoading(false);
 
-      if (user) {
-        const token = localStorage.getItem('token');
-        if (token) {
-          await axios.post(
-            'https://ai-pharma-dfcp.vercel.app/generate/save',
-            { medicineName: content, content: generatedContent },
-            { headers: { 'Authorization': `Bearer ${token}` } }
-          );
-          fetchSavedContent();
+        if (user) {
+          const token = localStorage.getItem('token');
+          if (token) {
+            axios.post(
+              'https://ai-pharma-dfcp.vercel.app/generate/save',
+              { medicineName: content, content: generatedContent },
+              { headers: { 'Authorization': `Bearer ${token}` } }
+            );
+            fetchSavedContent();
+          }
+        } else {
+          setPromptLogin(true);
         }
-      }
+      }, 1000); 
+
     } catch (error) {
       console.error('Error generating or saving content:', error);
+      setLoading(false); 
     }
   };
 
@@ -189,20 +163,26 @@ const Home = () => {
         </button>
         <ThemeSelector themes={themes} changeTheme={changeTheme} />
         <div className="app-content">
-          {showSuggestions && (
+          {loading && <Loader loading={loading} />} {}
+          {!loading && showSuggestions && (
             <div className="welcome-container">
               <h1>Welcome to AI Pharma</h1>
               <p>Choose a medicine or search for one below:</p>
             </div>
           )}
-          {currentInput && (
+          {!loading && currentInput && (
             <div className="current-input">
               <h2>Current Input: {currentInput}</h2>
             </div>
           )}
-          <GeneratedContent generatedContent={generatedContent} />
-          {showSuggestions && <Suggestions onSuggestionClick={handleGenerateContent} />}
-          <InputForm setGeneratedContent={handleGenerateContent} />
+          {!loading && <GeneratedContent generatedContent={generatedContent} />}
+          {!loading && showSuggestions && <Suggestions onSuggestionClick={handleGenerateContent} />}
+          {!loading && <InputForm setGeneratedContent={handleGenerateContent} />}
+          {!loading && promptLogin && (
+            <div className="login-prompt">
+              <p>To save your content, please <button onClick={() => navigate('/login')}>log in</button> or <button onClick={() => navigate('/signup')}>sign up</button>.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

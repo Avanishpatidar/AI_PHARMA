@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ThemeSelector.css';
-import { FaPalette } from 'react-icons/fa'; // Import an icon from react-icons
+import { FaPalette } from 'react-icons/fa'; 
 
 function ThemeSelector({ themes, changeTheme }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -54,7 +54,7 @@ function formatAIResponse(content, activeSection, setActiveSection) {
     }
   });
 
-  console.log("Sections Extracted:", sections); // Debugging: Log the extracted sections
+  console.log("Sections Extracted:", sections);
 
   const activeSectionData = sectionTitles[activeSection];
   const sectionContent = sections[activeSectionData.name];
@@ -99,7 +99,7 @@ function AnimatedCard({ title, icon, content }) {
     const animateLines = (lines, index) => {
       if (index < lines.length) {
         setDisplayedContent(prevLines => [...prevLines, lines[index]]);
-        timeoutId = setTimeout(() => animateLines(lines, index + 1), 500); // Adjust animation speed here
+        timeoutId = setTimeout(() => animateLines(lines, index + 1), 500);
       } else {
         setIsAnimating(false);
       }
