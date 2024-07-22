@@ -1,7 +1,7 @@
 .theme-selector {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 8px;
+  right: 15px;
   z-index: 1000;
 }
 

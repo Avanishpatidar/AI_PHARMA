@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; 
 import Loader from '../components/Loader';
+import { MdHealthAndSafety } from "react-icons/md";
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -28,12 +29,16 @@ const Login = () => {
   };
 
   return (
+    
     <div className="login-container">
+      
       <form className="login-form" onSubmit={handleSubmit}>
         {error && <div className="error">{error}</div>}
         {loading && <Loader loading={loading} />} {}
         {!loading && (
           <>
+          
+          <div className="logo_name"><MdHealthAndSafety className='logo-icon' />MediBot</div>
             <input
               type="text"
               value={username}

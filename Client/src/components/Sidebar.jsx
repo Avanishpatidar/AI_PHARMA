@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaSignOutAlt, FaCogs } from 'react-icons/fa';
+import { MdHealthAndSafety } from "react-icons/md";
+
 import { MdMenu } from 'react-icons/md';
 import './Sidebar.css';
 
@@ -22,8 +24,8 @@ const Sidebar = ({ savedContent, isOpen, onItemClick, selectedItem }) => {
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <div className="logo-details">
-          <FaCogs className='logo-icon' />
-          <div className="logo_name">Pharma Insight</div>
+          <MdHealthAndSafety className='logo-icon' />
+          <div className="logo_name">MediBot</div>
         </div>
       </div>
       {user ? (

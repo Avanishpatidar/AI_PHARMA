@@ -23,6 +23,12 @@ const themes = {
     hlColor: '#4caf50',  
     fgColor: '#f2f2f2'  
   },
+  mkbhd: {
+    bgColor: '#000',
+    fontColor: '#fff',
+    hlColor: '#4caf50',
+    fgColor: '#333'
+  },  
   health: {
     bgColor: '#e9f5f7',  
     fontColor: '#2c3e50',  
@@ -35,6 +41,12 @@ const themes = {
     hlColor: '#f6b352',  
     fgColor: '#f9f9f9'   
   },
+  moch:{
+    bgColor: '#f2e6d8',
+        fontColor: '#3b2925',
+        hlColor: '#c19875',
+        fgColor: '#f2e6d8'
+      },
   tranquility: {
     bgColor: '#fefae0',  
     fontColor: '#7e5a2f',  
