@@ -43,10 +43,10 @@ const themes = {
   },
   moch:{
     bgColor: '#f2e6d8',
-        fontColor: '#3b2925',
-        hlColor: '#c19875',
-        fgColor: '#f2e6d8'
-      },
+    fontColor: '#3b2925',
+    hlColor: '#c19875',
+    fgColor: '#f2e6d8'
+  },
   tranquility: {
     bgColor: '#fefae0',  
     fontColor: '#7e5a2f',  
@@ -102,7 +102,7 @@ const Home = () => {
   };
 
   const handleGenerateContent = async (content) => {
-    setLoading(true); // Start loader
+    setLoading(true);
     setCurrentInput(content);
 
     try {
@@ -125,21 +125,38 @@ const Home = () => {
         if (user) {
           const token = localStorage.getItem('token');
           if (token) {
-            axios.post(
-              'https://ai-pharma-dfcp.vercel.app/generate/save',
-              { medicineName: content, content: generatedContent },
-              { headers: { 'Authorization': `Bearer ${token}` } }
-            );
-            fetchSavedContent();
+            // Check if content already exists
+            const contentExists = savedContent.some(item => item.medicineName === content);
+            if (!contentExists) {
+              const newSavedItem = {
+                medicineName: content,
+                content: generatedContent,
+                date: new Date().toISOString()
+              };
+              
+              // Update local state
+              setSavedContent(prevContent => [newSavedItem, ...prevContent]);
+
+              // Save to server
+              axios.post(
+                'https://ai-pharma-dfcp.vercel.app/generate/save',
+                newSavedItem,
+                { headers: { 'Authorization': `Bearer ${token}` } }
+              ).catch(error => {
+                console.error('Error saving content:', error);
+                // If save fails, remove from local state
+                setSavedContent(prevContent => prevContent.filter(item => item.medicineName !== content));
+              });
+            }
           }
         } else {
           setPromptLogin(true);
         }
-      }, 1000); 
+      }, 1000);
 
     } catch (error) {
-      console.error('Error generating or saving content:', error);
-      setLoading(false); 
+      console.error('Error generating content:', error);
+      setLoading(false);
     }
   };
 
@@ -175,7 +192,7 @@ const Home = () => {
         </button>
         <ThemeSelector themes={themes} changeTheme={changeTheme} />
         <div className="app-content">
-          {loading && <Loader loading={loading} />} {}
+          {loading && <Loader loading={loading} />}
           {!loading && showSuggestions && (
             <div className="welcome-container">
               <h1>Welcome to AI Pharma</h1>
