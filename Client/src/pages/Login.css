@@ -78,4 +78,19 @@
     color: #e74c3c;
     margin-bottom: 1rem;
   }
+
+  .logo-icon {
+    font-size: 2rem; /* Adjust icon size */
+    display:flex;
+    justify-content:center;
+    /* margin-right: 10px; Add spacing between icon and text */
+  }
+  
+  .logo_name {
+    font-size: 2rem; /* Adjust heading size */
+    font-weight: bold;
+    margin-left:10px;
+    display:flex;
+    justify-content:center;
+  }
   

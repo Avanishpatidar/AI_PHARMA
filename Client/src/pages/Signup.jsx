@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Signup.css'; 
 import Loader from '../components/Loader'; 
+import { MdHealthAndSafety } from "react-icons/md";
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -33,6 +34,7 @@ const Signup = () => {
         {loading && <Loader loading={loading} />} {/* Show loader */}
         {!loading && (
           <>
+            <div className="logo_name"><MdHealthAndSafety className='logo-icon' />MediBot</div>
             <input
               type="text"
               value={username}
