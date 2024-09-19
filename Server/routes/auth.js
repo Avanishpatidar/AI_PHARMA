@@ -6,7 +6,6 @@ const router = express.Router();
 router.post('/signup', async (req, res) => {
   const { username, password } = req.body;
   try {
-    // Check if user already exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ error: 'Username already exists' });
@@ -15,7 +14,6 @@ router.post('/signup', async (req, res) => {
     const user = new User({ username, password });
     await user.save();
 
-    // Generate token for the new user
     const token = jwt.sign(
       { id: user._id, username: user.username },
       process.env.JWT_SECRET,

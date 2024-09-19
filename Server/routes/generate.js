@@ -1,12 +1,10 @@
 const express = require('express');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const jwt = require('jsonwebtoken');
 const SavedContent = require('../models/SavedContent');
 const router = express.Router();
 const authenticateToken = require('../middleware/authMiddleware');
 
 require('dotenv').config();
-
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
@@ -14,7 +12,7 @@ const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 let lastRequestTime = 0;
 const RATE_LIMIT_INTERVAL = 1000;
 
-const generateContent = async (medicineName) => {
+const generateMedicineInfo = async (medicineName) => {
   const prompt = `
     Please provide detailed information about the medicine "${medicineName}" in the following categories. Each section should start with the section name followed by a colon (:), and then the content. If information is not available, please mention "Not available".
 
@@ -38,6 +36,17 @@ const generateContent = async (medicineName) => {
   return result.response.text();
 };
 
+const generateHealthAnswer = async (question) => {
+  const prompt = `
+    As a knowledgeable health assistant, please provide a clear and concise answer to the following health-related question. If the question is about a specific condition, include information about symptoms, causes, and general treatment approaches. If it's about healthy living, provide practical advice and scientific reasoning where applicable. Always encourage consulting with a healthcare professional for personalized medical advice.
+
+    Question: ${question}
+  `;
+
+  const result = await model.generateContent(prompt);
+  return result.response.text();
+};
+
 const rateLimiter = (req, res, next) => {
   const now = Date.now();
   if (now - lastRequestTime < RATE_LIMIT_INTERVAL) {
@@ -47,14 +56,20 @@ const rateLimiter = (req, res, next) => {
   next();
 };
 
-
-router.post('/', async (req, res) => {
-  const { medicineName } = req.body;
-  if (!medicineName) {
-    return res.status(400).json({ error: 'medicineName is required' });
+router.post('/', rateLimiter, async (req, res) => {
+  const { query } = req.body;
+  if (!query) {
+    return res.status(400).json({ error: 'Query is required' });
   }
+
   try {
-    const content = await generateContent(medicineName);
+    let content;
+    if (query.toLowerCase().startsWith('medicine:')) {
+      const medicineName = query.slice(9).trim();
+      content = await generateMedicineInfo(medicineName);
+    } else {
+      content = await generateHealthAnswer(query);
+    }
     res.json({ content });
   } catch (error) {
     console.error('Error generating content:', error);
@@ -62,13 +77,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-
 router.post('/save', authenticateToken, async (req, res) => {
-  const { medicineName, content } = req.body;
+  const { query, content } = req.body;
   try {
     const savedContent = new SavedContent({
       userId: req.user.id,
-      medicineName,
+      query,
       content,
     });
     await savedContent.save();
