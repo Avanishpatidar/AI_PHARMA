@@ -32,6 +32,8 @@ const generateContent = async (medicineName) => {
     12. Side Effects: List possible side effects.
     13. Other Options: Suggest other medication options.
     14. Estimated Price in INR: Provide an estimated price in INR.
+
+    If the query is about general health, food, or lifestyle, provide a concise and informative response based on the latest research and guidelines. If the information is not available or the query is beyond the scope of this model, respond with "I don't have enough information to answer that.".
   `;
 
   const result = await model.generateContent(prompt);
